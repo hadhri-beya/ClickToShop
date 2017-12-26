@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:s="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd">
+
+<bean id="datasource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+	<property name="driverClassName" value="com.mysql.jdbc.Driver"></property>
+	<property name="url" value="jdbc:mysql://localhost:3306/click_to_shop"></property>
+	<property name="username" value="root"></property>
+	<property name="password" value=""></property>
+</bean>
+
+<s:http>
+		<s:intercept-url pattern="/Vendeur/**" access="ROLE_Vendeur" />
+		<s:intercept-url pattern="/Acheteur/**" access="ROLE_Acheteur" />
+		<s:form-login login-page="/login" default-target-url="/Acheteur/index"
+			authentication-failure-url="/login" />
+		<s:logout logout-success-url="/login" />
+	</s:http>
+	<s:authentication-manager>
+		<s:authentication-provider>
+			<s:password-encoder hash="md5"></s:password-encoder>
+			<s:jdbc-user-service data-source-ref="datasource"
+				users-by-username-query="select username,password, actived from users where username=?"
+				authorities-by-username-query="select u.username, r.nomRole from users u, role r where u.iduser = r.iduser and u.username =? " />
+		</s:authentication-provider>
+	</s:authentication-manager>
+
+
+
+<bean id="persistenceUnitManager"
+	class="org.springframework.orm.jpa.persistenceunit.DefaultPersistenceUnitManager">
+	<property name="defaultDataSource" ref="datasource"></property>
+	<property name="persistenceXmlLocations">
+		<list>
+			<value>classpath*:META-INF/persistence.xml</value>
+		</list>
+	</property>
+</bean>
+
+<bean id="entityManagerFactory"
+	class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+	<property name="persistenceUnitManager" ref="persistenceUnitManager"></property>
+	<property name="persistenceUnitName" value="UP_SHOP"></property>
+</bean>
+
+<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="entityManagerFactory"></property>
+	</bean>
+	<tx:annotation-driven transaction-manager="transactionManager" />
+	<context:annotation-config></context:annotation-config>
+<bean id="pdao" class="com.isamm.clicktoshop.dao.ProduitDAOImpl"></bean>
+	<bean id="metier" class="com.isamm.clicktoshop.metier.ShopMetierImpl">
+		<property name="pdao" ref="pdao"></property>
+	</bean>
+
+
+<bean id="udao" class="com.isamm.clicktoshop.dao.UserDAOImpl"></bean>
+	<bean id="metierUser" class="com.isamm.clicktoshop.metier.UserMetierImpl">
+		<property name="udao" ref="udao"></property>
+	</bean>
+</beans>
+
