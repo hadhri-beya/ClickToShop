@@ -3,6 +3,7 @@ package com.isamm.clicktoshop.metier;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.isamm.clicktoshop.dao.IDAO;
+import com.isamm.clicktoshop.dao.UserDAOImpl;
 import com.isamm.clicktoshop.entities.User;
 
 @Transactional
@@ -26,9 +27,19 @@ public class UserMetierImpl implements IUserMetier{
 	}
 
 	@Override
-	public void updateUser(User u) {
-		// TODO Auto-generated method stub
+	public boolean updateUser(User u) {
+		return udao.update(u);
 		
+	}
+
+	@Override
+	public User getUserByUsername(String username) {
+		return udao.getUserByUsername(username);
+	}
+
+	@Override
+	public User getById(Long id) {
+		return udao.getById(id);
 	}
 
 }

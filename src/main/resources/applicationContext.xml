@@ -19,7 +19,7 @@
 <s:http>
 		<s:intercept-url pattern="/Vendeur/**" access="ROLE_Vendeur" />
 		<s:intercept-url pattern="/Acheteur/**" access="ROLE_Acheteur" />
-		<s:form-login login-page="/login" default-target-url="/Acheteur/index"
+		<s:form-login login-page="/login" default-target-url="/"
 			authentication-failure-url="/login" />
 		<s:logout logout-success-url="/login" />
 	</s:http>
@@ -32,6 +32,7 @@
 		</s:authentication-provider>
 	</s:authentication-manager>
 
+<bean id="webexpressionHandler" class="org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler" /> 
 
 
 <bean id="persistenceUnitManager"
@@ -56,8 +57,18 @@
 	<tx:annotation-driven transaction-manager="transactionManager" />
 	<context:annotation-config></context:annotation-config>
 <bean id="pdao" class="com.isamm.clicktoshop.dao.ProduitDAOImpl"></bean>
+<bean id="panierdao" class="com.isamm.clicktoshop.dao.PanierDAOImpl"></bean>
+<bean id="categoriedao" class="com.isamm.clicktoshop.dao.CategorieDAOImpl"></bean>
+<bean id="boutiquedao" class="com.isamm.clicktoshop.dao.BoutiqueDAOImpl"></bean>
+<bean id="favorisdao" class="com.isamm.clicktoshop.dao.FavorisDAOImpl"></bean>
+
 	<bean id="metier" class="com.isamm.clicktoshop.metier.ShopMetierImpl">
 		<property name="pdao" ref="pdao"></property>
+		<property name="panierdao" ref="panierdao"></property>
+		<property name="categoriedao" ref="categoriedao"></property>
+		<property name="boutiquedao" ref="boutiquedao"></property>
+		<property name="favorisdao" ref="favorisdao"></property>
+		
 	</bean>
 
 

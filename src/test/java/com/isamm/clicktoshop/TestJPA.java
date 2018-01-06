@@ -22,6 +22,7 @@ public class TestJPA {
 		try {
 			ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
 					new String[] { "applicationContext.xml" });
+			assertTrue(true);
 			/*
 			IVendeurMetier metier=(IVendeurMetier) context.getBean("metier");
 			List<Produit> cats1=metier.listproduits();

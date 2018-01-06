@@ -6,13 +6,14 @@
 <a href="<c:url value="/j_spring_security_logout" />">logout</a>
 
 <div id="formCat" class="cadre">
-	<f:form modelAttribute="produit" action="saveProd" method="post">
+	<f:form modelAttribute="produit" action="saveProd" method="post" enctype="multipart/form-data">
+	
 		<table>
 			<tr>
 				<td>ID Produit:</td>
-				<td>${produit.idproduit}<f:input type="hidden"
-						path="idproduit" /></td>
-				<td><f:errors path="idproduit"></f:errors></td>
+				<td>${produit.idProduit}<f:input type="hidden"
+						path="idProduit" /></td>
+				<td><f:errors path="idProduit"></f:errors></td>
 			</tr>
 			<tr>
 				<td>Designation</td>
@@ -27,12 +28,19 @@
 			</tr>
 			
 			<tr>
+				<td>Photo</td>
+				<c:if test="${produit.idProduit!=null}">
+					<td><img src="photoProd?idProd=${produit.idProduit}"></td>
+				</c:if>
+				<td><input type="file" name="file"></td>
+			</tr>
+			
+			<tr>
 				<td><input type="submit" value="Save"></td>
 			</tr>
 		</table>
 	</f:form>
 </div>
-
 
 <div id="tabCategories" class="cadre">
 	<table class="tabStyle1">
@@ -40,16 +48,18 @@
 			<th>ID</th>
 			<th>DESIGNATION</th>
 			<th>DESCRIPTION</th>
+			<th>PHOTO</th>
 			<th></th>
 			<th></th>
 		</tr>
 		<c:forEach items="${produits}" var="prod">
 			<tr>
-				<td>${prod.idproduit}</td>
+				<td>${prod.idProduit}</td>
 				<td>${prod.designation}</td>
 				<td>${prod.description}</td>
-				<td><a href="suppProd?idCat=${prod.idproduit}">Supprimer</a></td>
-				<td><a href="editProd?idCat=${prod.idproduit}">Edit</a></td>
+				<td><img src="photoProd?idProd=${prod.idProduit}"></td>
+				<td><a href="suppProd?idProd=${prod.idProduit}">Supprimer</a></td>
+				<td><a href="editProd?idProd=${prod.idProduit}">Edit</a></td>
 			</tr>
 		</c:forEach>
 	</table>

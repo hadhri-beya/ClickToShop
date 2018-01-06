@@ -7,6 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.Size;
 
@@ -16,18 +17,23 @@ import org.hibernate.validator.constraints.NotEmpty;
 public class Produit implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Long idproduit;
+	private Long idProduit;
 	@NotEmpty
 	@Size(min=4,max=15)
 	private String designation ;
 	private String description ;
 	private double prix ;
 	private boolean selected ;
-	private String nomPhoto ;
+	@Lob
+	private byte[] photo ;
+	private String couleur ;
 	private int quantite ;
 	@ManyToOne
 	@JoinColumn(name="idCategorie")
 	private Categorie categorie;
+	@ManyToOne
+	@JoinColumn(name="idBoutique")
+	private Boutique boutique;
 	public Categorie getCategorie() {
 		return categorie;
 	}
@@ -38,20 +44,31 @@ public class Produit implements Serializable {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public Produit(String designation, String description, double prix, boolean selected, String nomPhoto,
-			int quantite) {
+
+	public Produit(String designation, String description, double prix, boolean selected, byte[] photo, String couleur,
+			int quantite, Categorie categorie, Boutique boutique) {
+		super();
 		this.designation = designation;
 		this.description = description;
 		this.prix = prix;
 		this.selected = selected;
-		this.nomPhoto = nomPhoto;
+		this.photo = photo;
+		this.couleur = couleur;
 		this.quantite = quantite;
+		this.categorie = categorie;
+		this.boutique = boutique;
 	}
-	public Long getIdproduit() {
-		return idproduit;
+	public String getCouleur() {
+		return couleur;
 	}
-	public void setIdproduit(Long idproduit) {
-		this.idproduit = idproduit;
+	public void setCouleur(String couleur) {
+		this.couleur = couleur;
+	}
+	public Long getIdProduit() {
+		return idProduit;
+	}
+	public void setIdProduit(Long idProduit) {
+		this.idProduit = idProduit;
 	}
 	public String getDesignation() {
 		return designation;
@@ -77,17 +94,24 @@ public class Produit implements Serializable {
 	public void setSelected(boolean selected) {
 		this.selected = selected;
 	}
-	public String getNomPhoto() {
-		return nomPhoto;
+	
+	public byte[] getPhoto() {
+		return photo;
 	}
-	public void setNomPhoto(String nomPhoto) {
-		this.nomPhoto = nomPhoto;
+	public void setPhoto(byte[] photo) {
+		this.photo = photo;
 	}
 	public int getQuantite() {
 		return quantite;
 	}
 	public void setQuantite(int quantite) {
 		this.quantite = quantite;
+	}
+	public Boutique getBoutique() {
+		return boutique;
+	}
+	public void setBoutique(Boutique boutique) {
+		this.boutique = boutique;
 	}
 	
 	
